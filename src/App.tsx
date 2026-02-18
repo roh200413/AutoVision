@@ -5,8 +5,10 @@ import { Card } from './components/Card';
 type FileNode = { name: string };
 type FolderNode = { name: string; files: FileNode[] };
 type DatasetNode = { name: string; path: string; folders: FolderNode[] };
+type ModelNode = { name: string; version: string; status: string; mAP: number; latency: number };
+type LogNode = { time: string; type: 'INFO' | 'WARN' | 'ERROR'; message: string; actor: string };
 
-type NavTab = 'data' | 'model' | 'log';
+type NavTab = 'data' | 'model' | 'log' | 'settings';
 
 type ModalState = {
   title: string;
@@ -36,10 +38,16 @@ const datasets: DatasetNode[] = [
   },
 ];
 
-const models = [
-  { name: 'Defect Detector V1', version: '1.2.0', status: 'Active' },
-  { name: 'Surface Segmenter', version: '2.1.4', status: 'Standby' },
-  { name: 'Bolt Classifier', version: '0.9.8', status: 'Draft' },
+const models: ModelNode[] = [
+  { name: 'Defect Detector V1', version: '1.2.0', status: 'Active', mAP: 94.3, latency: 22 },
+  { name: 'Surface Segmenter', version: '2.1.4', status: 'Standby', mAP: 91.2, latency: 29 },
+  { name: 'Bolt Classifier', version: '0.9.8', status: 'Draft', mAP: 88.7, latency: 17 },
+];
+
+const logs: LogNode[] = [
+  { time: '2026-02-16 10:24', type: 'INFO', message: 'Dataset 1 동기화 완료', actor: 'system' },
+  { time: '2026-02-16 10:26', type: 'WARN', message: 'Surface Segmenter 임계값 변경', actor: 'admin' },
+  { time: '2026-02-16 10:28', type: 'ERROR', message: 'Dataset 2 일부 파일 누락 감지', actor: 'system' },
 ];
 
 function createMockImage(fileName: string) {
@@ -97,24 +105,125 @@ function DataTree({ onSelectFile }: { onSelectFile: (value: string) => void }) {
 }
 
 function ModelManagerPage() {
+  const [selectedModel, setSelectedModel] = useState<ModelNode>(models[0]);
+
   return (
     <div className="model-page">
       <header className="model-page__header">
         <h2>Model Management</h2>
         <Button variant="primary">+ 모델 등록</Button>
       </header>
-      <div className="model-list">
-        {models.map((model) => (
-          <Card key={model.name}>
-            <div className="model-item">
-              <div>
-                <strong>{model.name}</strong>
-                <p>Version: {model.version}</p>
+      <div className="model-page-grid">
+        <div className="model-list">
+          {models.map((model) => (
+            <button key={model.name} className="model-card-button" onClick={() => setSelectedModel(model)}>
+              <Card>
+                <div className="model-item">
+                  <div>
+                    <strong>{model.name}</strong>
+                    <p>Version: {model.version}</p>
+                  </div>
+                  <span className="model-badge">{model.status}</span>
+                </div>
+              </Card>
+            </button>
+          ))}
+        </div>
+
+        <Card>
+          <div className="model-detail">
+            <h3>{selectedModel.name}</h3>
+            <p>현재 선택된 모델의 성능 지표와 배포 상태입니다.</p>
+            <div className="metrics-grid">
+              <div className="metric-item">
+                <span>mAP</span>
+                <strong>{selectedModel.mAP}%</strong>
               </div>
-              <span className="model-badge">{model.status}</span>
+              <div className="metric-item">
+                <span>Latency</span>
+                <strong>{selectedModel.latency}ms</strong>
+              </div>
+              <div className="metric-item">
+                <span>Version</span>
+                <strong>{selectedModel.version}</strong>
+              </div>
+              <div className="metric-item">
+                <span>Status</span>
+                <strong>{selectedModel.status}</strong>
+              </div>
             </div>
-          </Card>
-        ))}
+            <div className="model-actions">
+              <Button variant="secondary">학습 이력</Button>
+              <Button variant="primary">배포하기</Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function LogPage() {
+  return (
+    <div className="page-surface">
+      <header className="page-header">
+        <h2>System Logs</h2>
+        <div className="top-actions">
+          <Button variant="secondary">오늘</Button>
+          <Button variant="secondary">에러만</Button>
+        </div>
+      </header>
+      <Card>
+        <div className="log-table-wrap">
+          <table className="log-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Actor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {logs.map((item) => (
+                <tr key={`${item.time}-${item.message}`}>
+                  <td>{item.time}</td>
+                  <td>
+                    <span className={`badge badge--${item.type.toLowerCase()}`}>{item.type}</span>
+                  </td>
+                  <td>{item.message}</td>
+                  <td>{item.actor}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function SettingsPage() {
+  return (
+    <div className="page-surface">
+      <header className="page-header">
+        <h2>Settings</h2>
+      </header>
+      <div className="settings-grid">
+        <Card>
+          <div className="settings-card">
+            <h3>데이터 루트 경로</h3>
+            <p>C:/autovision/datasets</p>
+            <Button variant="secondary">경로 변경</Button>
+          </div>
+        </Card>
+        <Card>
+          <div className="settings-card">
+            <h3>추론 옵션</h3>
+            <p>Confidence 0.45 / NMS 0.5</p>
+            <Button variant="secondary">옵션 편집</Button>
+          </div>
+        </Card>
       </div>
     </div>
   );
@@ -136,13 +245,34 @@ function Modal({ state, onClose }: { state: ModalState; onClose: () => void }) {
   );
 }
 
+function DataPage({ selectedImage, selectedFile, setSelectedFile }: { selectedImage: string; selectedFile: string; setSelectedFile: (value: string) => void; }) {
+  return (
+    <div className="content-grid">
+      <Card>
+        <div className="image-canvas">
+          <img src={selectedImage} alt={selectedFile} className="preview-image" />
+        </div>
+      </Card>
+      <aside className="data-panel">
+        <div className="data-header">Data</div>
+        <div className="data-tree-wrap">
+          <DataTree onSelectFile={setSelectedFile} />
+        </div>
+        <div className="panel-bottom-actions">
+          <Button fullWidth>라벨링 추가</Button>
+          <Button fullWidth>확정</Button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('data');
   const [selectedFile, setSelectedFile] = useState('filename01.png');
   const [modalState, setModalState] = useState<ModalState>(null);
 
   const selectedImage = useMemo(() => createMockImage(selectedFile), [selectedFile]);
-
   const currentPath = useMemo(() => datasets.map((item) => `${item.name}: ${item.path}`).join('\n'), []);
 
   return (
@@ -150,42 +280,17 @@ export function App() {
       <aside className="left-sidebar">
         <header className="brand">HAN JOO LIGHT METAL</header>
         <nav className="left-nav">
-          <Button
-            className={`nav-item ${activeTab === 'data' ? 'nav-item--active' : ''}`}
-            variant={activeTab === 'data' ? 'primary' : 'ghost'}
-            fullWidth
-            onClick={() => setActiveTab('data')}
-          >
-            Data
-          </Button>
-          <Button
-            className={`nav-item ${activeTab === 'model' ? 'nav-item--active' : ''}`}
-            variant={activeTab === 'model' ? 'primary' : 'ghost'}
-            fullWidth
-            onClick={() => setActiveTab('model')}
-          >
-            Model
-          </Button>
-          <Button
-            className={`nav-item ${activeTab === 'log' ? 'nav-item--active' : ''}`}
-            variant={activeTab === 'log' ? 'primary' : 'ghost'}
-            fullWidth
-            onClick={() => setActiveTab('log')}
-          >
-            Log
-          </Button>
+          <Button className={`nav-item ${activeTab === 'data' ? 'nav-item--active' : ''}`} variant={activeTab === 'data' ? 'primary' : 'ghost'} fullWidth onClick={() => setActiveTab('data')}>Data</Button>
+          <Button className={`nav-item ${activeTab === 'model' ? 'nav-item--active' : ''}`} variant={activeTab === 'model' ? 'primary' : 'ghost'} fullWidth onClick={() => setActiveTab('model')}>Model</Button>
+          <Button className={`nav-item ${activeTab === 'log' ? 'nav-item--active' : ''}`} variant={activeTab === 'log' ? 'primary' : 'ghost'} fullWidth onClick={() => setActiveTab('log')}>Log</Button>
+          <Button className={`nav-item ${activeTab === 'settings' ? 'nav-item--active' : ''}`} variant={activeTab === 'settings' ? 'primary' : 'ghost'} fullWidth onClick={() => setActiveTab('settings')}>Settings</Button>
         </nav>
       </aside>
 
       <section className="workspace">
         <header className="topbar">
           <div className="top-actions">
-            <Button
-              variant="secondary"
-              onClick={() => setModalState({ title: '데이터 업데이트', description: '데이터 동기화를 시작했습니다.' })}
-            >
-              데이터 업데이트
-            </Button>
+            <Button variant="secondary" onClick={() => setModalState({ title: '데이터 업데이트', description: '데이터 동기화를 시작했습니다. 완료 후 로그 탭에 기록됩니다.' })}>데이터 업데이트</Button>
             <Button
               variant="secondary"
               onClick={() =>
@@ -198,38 +303,13 @@ export function App() {
               경로 확인
             </Button>
           </div>
-          <Button variant="success" className="ok-btn">
-            OK
-          </Button>
+          <Button variant="success" className="ok-btn">OK</Button>
         </header>
 
-        {activeTab === 'data' && (
-          <div className="content-grid">
-            <Card>
-              <div className="image-canvas">
-                <img src={selectedImage} alt={selectedFile} className="preview-image" />
-              </div>
-            </Card>
-            <aside className="data-panel">
-              <div className="data-header">Data</div>
-              <div className="data-tree-wrap">
-                <DataTree onSelectFile={setSelectedFile} />
-              </div>
-              <div className="panel-bottom-actions">
-                <Button fullWidth>라벨링 추가</Button>
-                <Button fullWidth>확정</Button>
-              </div>
-            </aside>
-          </div>
-        )}
-
+        {activeTab === 'data' && <DataPage selectedImage={selectedImage} selectedFile={selectedFile} setSelectedFile={setSelectedFile} />}
         {activeTab === 'model' && <ModelManagerPage />}
-        {activeTab === 'log' && (
-          <div className="placeholder-page">
-            <h2>Log</h2>
-            <p>작업 로그 페이지는 다음 단계에서 연동 가능합니다.</p>
-          </div>
-        )}
+        {activeTab === 'log' && <LogPage />}
+        {activeTab === 'settings' && <SettingsPage />}
       </section>
 
       <Modal state={modalState} onClose={() => setModalState(null)} />
