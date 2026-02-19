@@ -110,6 +110,18 @@ body {
 .workspace {
   display: grid;
   grid-template-rows: 88px 1fr;
+  min-height: 100vh;
+  padding-bottom: 10px;
+}
+
+.workspace-header {
+  border-bottom: 1px solid #3a4050;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  background: #22252e;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .topbar {
@@ -130,8 +142,11 @@ body {
   width: 150px;
 }
 
-.content-grid {
+.page-content {
   min-height: 0;
+}
+
+.content-grid {
   display: grid;
   grid-template-columns: 1fr 304px;
 }
@@ -143,7 +158,8 @@ body {
 
 .image-canvas {
   width: 100%;
-  height: calc(100vh - 88px);
+  height: calc(100vh - 186px);
+  min-height: 440px;
   position: relative;
   overflow: hidden;
 }
@@ -213,4 +229,20 @@ body {
   padding: 14px;
   display: grid;
   gap: 14px;
+}
+
+.single-page {
+  padding: 20px;
+}
+
+.page-title {
+  margin: 0 0 12px;
+  font-size: 30px;
+}
+
+.page-panel {
+  color: #212737;
+  min-height: 300px;
+  padding: 24px;
+  font-size: 18px;
 }
