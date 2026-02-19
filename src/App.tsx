@@ -8,13 +8,7 @@ const dataset = [
     folders: [
       { name: 'p1', files: ['filename01.png', 'filename02.png', 'filename03.png'] },
     ],
-  },
-  {
-    name: 'Dataset 2',
-    folders: [
-      { name: 's1', files: ['filename11.png', 'filename12.png', 'filename13.png'] },
-    ],
-  },
+  }
 ];
 
 function TreeFolder({ name, children }: { name: string; children?: ReactNode }) {
@@ -52,12 +46,17 @@ export function App() {
       <section className="workspace">
         <header className="topbar">
           <div className="top-actions">
+            <Button variant="secondary">AI Model</Button>
+            <Button variant="secondary">모델 이름</Button>
             <Button variant="secondary">데이터 업데이트</Button>
             <Button variant="secondary">경로 확인</Button>
           </div>
-          <Button variant="success" className="ok-btn">
-            OK
-          </Button>
+
+          <div className="top-actions">          
+            <Button variant="secondary" className="ok-btn">모델 추론</Button>
+            <Button variant="secondary" className="ok-btn">전체 추론</Button>
+          </div>
+
         </header>
 
         <div className="content-grid">
@@ -93,9 +92,10 @@ export function App() {
                 ))}
               </ul>
             </div>
-            <div className="panel-bottom-actions">
-              <Button fullWidth>라벨링 추가</Button>
-              <Button fullWidth>확정</Button>
+            <div className="panel-bottom-actions">          
+            <Button variant="success">
+              OK
+            </Button>
             </div>
           </aside>
         </div>

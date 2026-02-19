@@ -82,9 +82,9 @@ body {
 }
 
 .ds-button--success {
-  background: #1ec465;
+  background: #1376e6;
   border: none;
-  color: #091407;
+  color: #dce3f7;
   font-size: 36px;
   line-height: 1;
   padding-top: 16px;
@@ -127,7 +127,7 @@ body {
 }
 
 .ok-btn {
-  width: 300px;
+  width: 150px;
 }
 
 .content-grid {
@@ -175,7 +175,7 @@ body {
   background: #373a44;
   border-bottom: 1px solid #434857;
   padding: 12px 10px;
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 700;
 }
 
@@ -188,15 +188,15 @@ body {
 .tree-root ul {
   list-style: none;
   margin: 0;
-  padding-left: 18px;
+  padding-left: 5px;
 }
 
 .tree-row {
-  padding: 8px 0;
+  padding: 2px 0;
   display: flex;
-  gap: 8px;
+  gap: 5px;
   align-items: center;
-  font-size: 30px;
+  font-size: 15px;
   color: #f0f3ff;
 }
 
