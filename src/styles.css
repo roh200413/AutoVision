@@ -273,3 +273,90 @@ body {
 
   border-radius: 0;
 }
+.model-page {
+  display: grid;
+  gap: 12px;
+}
+
+.model-page-description {
+  margin: 0;
+  color: #c7cedf;
+  font-size: 17px;
+}
+
+.model-list {
+  display: grid;
+  gap: 12px;
+}
+
+.model-row-card {
+  background: #151924;
+  color: #e9eeff;
+  border: 1px solid #31384a;
+  padding: 14px;
+  display: grid;
+  gap: 14px;
+}
+
+.model-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.model-row-head h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.model-row-train-btn {
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.model-row-fields {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr auto;
+  gap: 12px;
+}
+
+.model-field {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: #a9b3ca;
+}
+
+.model-field select,
+.model-field input[type='text'] {
+  border: 1px solid #4a5368;
+  border-radius: 8px;
+  background: #11141d;
+  color: #f0f4ff;
+  height: 40px;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.model-field--checkbox {
+  align-content: end;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-field--checkbox input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 980px) {
+  .model-row-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .model-field--checkbox {
+    justify-content: flex-start;
+  }
+}
