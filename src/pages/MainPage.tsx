@@ -30,10 +30,8 @@ export function MainPage() {
     <>
       <header className="topbar">
         <div className="top-actions">
-          <Button variant="secondary">AI Model</Button>
-          <Button variant="secondary">모델 이름</Button>
-          <Button variant="secondary">데이터 업데이트</Button>
-          <Button variant="secondary">경로 확인</Button>
+          <Button >AI Model</Button>
+          <Button className="path-btn">모델 이름</Button>
         </div>
 
         <div className="top-actions">
@@ -54,7 +52,12 @@ export function MainPage() {
         </Card>
 
         <aside className="data-panel">
-          <div className="data-header">Data</div>
+          <div >
+            <Button className="data-header">
+              <span >파일 경로</span>
+              <span >/dataset/sample1</span>
+            </Button>
+          </div>
           <div className="data-tree-wrap">
             <ul className="tree-root">
               {dataset.map((group) => (

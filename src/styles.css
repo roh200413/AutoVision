@@ -80,6 +80,12 @@ body {
   font-size: 17px;
   padding: 10px 16px;
 }
+.ds-button--item {
+  background: transparent;
+  border-color: #545c70;
+  font-size: 17px;
+  padding: 10px 16px;
+}
 
 .ds-button--success {
   background: #1376e6;
@@ -130,7 +136,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  background: #22252e;
+  background: #11141d;
 }
 
 .top-actions {
@@ -140,6 +146,12 @@ body {
 
 .ok-btn {
   width: 150px;
+}
+
+.path-btn {
+  background: #ffffff;
+  color: #22252e;
+  width: 300px;
 }
 
 .page-content {
@@ -245,4 +257,19 @@ body {
   min-height: 300px;
   padding: 24px;
   font-size: 18px;
+}
+
+.data-header {
+  background: #373a44;
+  border-bottom: 1px solid #434857;
+  width: 100%;
+  height: 100%;
+  font-size: 10px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 0;
 }

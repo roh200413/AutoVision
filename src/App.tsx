@@ -7,13 +7,6 @@ import type { PageKey } from './types/page';
 
 export function App() {
   const [activePage, setActivePage] = useState<PageKey>('main');
-
-  const pageTitle = useMemo(() => {
-    if (activePage === 'model') return 'Model';
-    if (activePage === 'log') return 'Log';
-    return 'Main';
-  }, [activePage]);
-
   return (
     <main className="app-shell">
       <aside className="left-sidebar">
@@ -47,7 +40,6 @@ export function App() {
       </aside>
 
       <section className="workspace">
-        <header className="workspace-header">{pageTitle}</header>
         {activePage === 'main' && <MainPage />}
         {activePage === 'model' && <ModelPage />}
         {activePage === 'log' && <LogPage />}
